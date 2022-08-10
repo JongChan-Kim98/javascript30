@@ -7,47 +7,45 @@
 </head>
 <body>
   <div class="keys">
-    <div data-key="65" class="key">
+    <div data-key="65" class="key" id="a">
       <!-- kbd = 키보드입력 요소 -->
-      <!-- https://developer.mozilla.org/ko/docs/Web/HTML/Element/kbd -->
-      <!-- 멈춰 d--> 
-      <kbd>A</kbd>
+      <!-- https://developer.mozilla.org/ko/docs/Web/HTML/Element/kbd -->      <kbd>A</kbd>
       <span class="sound">clap</span>
     </div>
-    <div data-key="83" class="key">
+    <div data-key="83" class="key" id="s">
       <kbd>S</kbd>
       <span class="sound">hihat</span>
     </div> 
-    <div data-key="68" class="key">
+    <div data-key="68" class="key" id="d">
       <kbd>D</kbd>
       <span class="sound">kick</span>
     </div>
-    <div data-key="70" class="key">
+    <div data-key="70" class="key" id="f">
       <kbd>F</kbd>
       <span class="sound">openhat</span>
     </div>
-    <div data-key="71" class="key">
+    <div data-key="71" class="key" id="g">
       <kbd>G</kbd>
       <span class="sound">boom</span>
     </div>
-    <div data-key="72" class="key">
+    <div data-key="72" class="key" id="h">
       <kbd>H</kbd>
       <span class="sound">ride</span>
     </div>
-    <div data-key="74" class="key">
+    <div data-key="74" class="key" id="j">
       <kbd>J</kbd>
       <span class="sound">snare</span>
     </div>
-    <div data-key="75" class="key">
+    <div data-key="75" class="key" id="k">
       <kbd>K</kbd>
       <span class="sound">tom</span>
     </div>
-    <div data-key="76" class="key">
+    <div data-key="76" class="key" id="l">
       <kbd>L</kbd>
       <span class="sound">tink</span>
     </div>
   </div>
-
+  <!-- https://mjmjmj98.tistory.com/31 -->
   <audio data-key="65" src="sounds/clap.wav"></audio>
   <audio data-key="83" src="sounds/hihat.wav"></audio>
   <audio data-key="68" src="sounds/kick.wav"></audio>
@@ -58,12 +56,23 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
-
-
-  
-</script>
-
-
 </body>
+<script>
+  // window.onkeydown = (e) => console.log(e);
+  // window.addEventListener("keydown", (e) => console.log(e));
+  window.addEventListener("keydown", e => {
+  const key = document.getElementById(e.key);
+  let audio = new Audio
+  if (key) key.classList.add('playing');
+  
+});
+
+
+window.addEventListener("keyup", e => {
+  const key = document.getElementById(e.key);
+  
+  if (key) key.classList.remove('playing');
+ 
+});
+</script>
 </html>
