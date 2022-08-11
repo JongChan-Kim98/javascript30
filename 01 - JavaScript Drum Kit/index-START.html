@@ -6,10 +6,11 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- kbd = 키보드입력 요소 -->
+  <!-- https://developer.mozilla.org/ko/docs/Web/HTML/Element/kbd -->
   <div class="keys">
     <div data-key="65" class="key" id="a">
-      <!-- kbd = 키보드입력 요소 -->
-      <!-- https://developer.mozilla.org/ko/docs/Web/HTML/Element/kbd -->      <kbd>A</kbd>
+      <kbd>A</kbd>
       <span class="sound">clap</span>
     </div>
     <div data-key="83" class="key" id="s">
@@ -45,6 +46,7 @@
       <span class="sound">tink</span>
     </div>
   </div>
+  <!-- 오디오 관련 -->
   <!-- https://mjmjmj98.tistory.com/31 -->
   <audio data-key="65" src="sounds/clap.wav"></audio>
   <audio data-key="83" src="sounds/hihat.wav"></audio>
@@ -58,21 +60,44 @@
 
 </body>
 <script>
+  // 키보드 이벤트(키다운,키업) https://www.daleseo.com/js-key-events/
   // window.onkeydown = (e) => console.log(e);
   // window.addEventListener("keydown", (e) => console.log(e));
   window.addEventListener("keydown", e => {
   const key = document.getElementById(e.key);
-  let audio = new Audio
   if (key) key.classList.add('playing');
-  
 });
-
 
 window.addEventListener("keyup", e => {
   const key = document.getElementById(e.key);
-  
   if (key) key.classList.remove('playing');
  
 });
+
+// https://takeu.tistory.com/34 드럼킷 내용
+function removeTransition(e) {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('playing');
+  }
+
+  function playSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    if (!audio) return;
+    key.classList.add('playing');
+    // 키 재입력 시간 설정(연속 입력 가능하도록)
+    // 오디오 재생의 현재 위치를 0초로 이동함.
+    // 이로써 입력 후 다시입력하면 같은 소리를 재생시킬 수 있어 소리가 끝나야 입력이 가능했던게 연속으로도 입력이 가능함
+    audio.currentTime = 0;
+    audio.play();
+  }
+
+  // key 클래스를 가진 모든 요소를 keys에 배열로 담고
+  // 반복자 forEach를 사용해 가각의 요소에 변화가 끝나면 (transitionend) removeTransition 함수를 실행하고,
+  // keydown 이벤트 타입을 실행하면 playSound 함수가 작동
+  const keys = Array.from(document.querySelectorAll('.key'));
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  window.addEventListener('keydown', playSound);
+
 </script>
 </html>

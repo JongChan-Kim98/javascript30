@@ -4,8 +4,66 @@
   <meta charset="UTF-8">
   <title>JS + CSS Clock</title>
 </head>
-<body>
+<style>
 
+  *{
+      padding: 0;
+      margin: 0;
+  }
+
+  html {
+    background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
+    background-size: cover;
+    font-family: 'helvetica neue';
+    text-align: center;
+    font-size: 10px;
+  }
+
+  body {
+    margin: 0;
+    font-size: 2rem;
+    display: flex;
+    flex: 1;
+    min-height: 100vh;
+    align-items: center;
+  }
+
+  .clock {
+    width: 30rem;
+    height: 30rem;
+    border: 20px solid white;
+    border-radius: 50%;
+    margin: 50px auto;
+    position: relative;
+    padding: 2rem;
+    box-shadow:
+      0 0 0 4px rgba(0,0,0,0.1),
+      inset 0 0 0 3px #EFEFEF,
+      inset 0 0 10px black,
+      0 0 10px rgba(0,0,0,0.2);
+  }
+
+  .clock-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-3px); /* account for the height of the clock hands */
+  }
+
+  .hand {
+    width: 50%;
+    height: 6px;
+    background: black;
+    position: absolute;
+    top: 50%;
+    /* https://www.tabmode.com/homepage/transform-origin.html */
+    /* 회전 중심을 지정 */
+    transform-origin:100% ;
+  }
+</style>
+<body>
+  <!-- 아날로그 시계 -->
+  <!-- https://jh91.tistory.com/entry/%EC%BD%94%EB%93%9C%EA%B3%B5%EC%9C%A0-%EC%95%84%EB%82%A0%EB%A1%9C%EA%B7%B8-%EC%8B%9C%EA%B3%84-%EB%A7%8C%EB%93%A4%EA%B8%B0#google_vignette -->
 
     <div class="clock">
       <div class="clock-face">
@@ -14,61 +72,35 @@
         <div class="hand second-hand"></div>
       </div>
     </div>
+  
 
-
-  <style>
-    html {
-      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
-      background-size: cover;
-      font-family: 'helvetica neue';
-      text-align: center;
-      font-size: 10px;
-    }
-
-    body {
-      margin: 0;
-      font-size: 2rem;
-      display: flex;
-      flex: 1;
-      min-height: 100vh;
-      align-items: center;
-    }
-
-    .clock {
-      width: 30rem;
-      height: 30rem;
-      border: 20px solid white;
-      border-radius: 50%;
-      margin: 50px auto;
-      position: relative;
-      padding: 2rem;
-      box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
-        inset 0 0 0 3px #EFEFEF,
-        inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
-    }
-
-    .clock-face {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
-    }
-
-    .hand {
-      width: 50%;
-      height: 6px;
-      background: black;
-      position: absolute;
-      top: 50%;
-    }
-
-  </style>
-
+</body>
+  <!-- 아날로그 시계 -->
+  <!-- https://jh91.tistory.com/entry/%EC%BD%94%EB%93%9C%EA%B3%B5%EC%9C%A0-%EC%95%84%EB%82%A0%EB%A1%9C%EA%B7%B8-%EC%8B%9C%EA%B3%84-%EB%A7%8C%EB%93%A4%EA%B8%B0#google_vignette -->
   <script>
+    const deg = 6;
+    // https://kyounghwan01.github.io/blog/JS/JSbasic/queryselector/ 쿼리설렉터 사용법인데 좀 아닌거같음
+    // https://ko.javascript.info/searching-elements-dom 이게 맞네 css가 아니라 id나 클래스요소 가져오는거
+    const hhand = document.querySelector('.hour-hand');
+    const mhand = document.querySelector('.min-hand');
+    const shand = document.querySelector('.second-hand');
 
+    // 웹페이지의 특정 부분을 주기적으로 업데이트할때 사용
+    setInterval(()=>{
+      let day = new Date();
+      // 90은 각도 때문에 함
+      //
+      let hh = day.getHours() * 29.5 + 90;
+      let mm = day.getMinutes() * deg + 90;
+      let ss = day.getSeconds() * deg + 90;
+
+      // https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotateZ
+      hhand.style.transform = `rotateZ(${(hh)+(mm/12)}deg)`;
+      mhand.style.transform = `rotateZ(${mm}deg)`;
+      shand.style.transform = `rotateZ(${ss}deg)`;
+
+      clearInterval(setInterval);
+    },1000);
 
   </script>
-</body>
 </html>
