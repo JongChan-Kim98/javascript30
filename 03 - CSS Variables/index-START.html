@@ -3,23 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
-</head>
-<body>
-  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
-
-  <div class="controls">
-    <label for="spacing">Spacing:</label>
-    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
-
-    <label for="blur">Blur:</label>
-    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
-
-    <label for="base">Base Color</label>
-    <input id="base" type="color" name="base" value="#ffc600">
-  </div>
-
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
-
   <style>
 
     /*
@@ -42,11 +25,64 @@
 
     input {
       width: 100px;
+    } 
+    /* css변수 사용 및 자바스크립트로 동적 수정 방법 */
+    /* https://fightingsean.tistory.com/9 */
+    /* :root => 문서의 최상위 요소를 가리킴. 즉 <html> 의미 / 전역 스코프의 css변수 선언할때 사용 */
+    :root{
+    /* -- 로 시작  */
+      --blur:10px;
+      --spacing:10px;
+      --base: #ffc600;
+    }
+
+    img{
+    /* var()로 접근 */
+      filter: blur(var(--blur));
+      padding: var(--spacing);
+      background: var(--base);
+    }
+
+    .hl {
+      color: var(--base);
     }
   </style>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
-  <script>
-  </script>
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
 </body>
+
+  <script>
+    // https://nykim.work/2 => 대부분여기거 보고옴
+    const inputs = document.querySelectorAll(".controls input");
+
+    const handleUpdate = function() {
+      const suffix = this.dataset.sizing || '';
+      // style.setProperty css 속성을 재할당하는데 사용 --spacing 같은경우 가상으로 만든 속성이어서 셋프로퍼티 메서드를 사용해서 접근해야함
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
+
+    inputs.forEach(input =>{
+      // change 마우스 움직임이 끝난 순간만 포착
+      input.addEventListener("change", handleUpdate);
+      // 드래그 도중의 값을 알기 위해 mousemove 사용
+      input.addEventListener("mousemove", handleUpdate);
+    });
+
+    
+  </script>
 </html>
